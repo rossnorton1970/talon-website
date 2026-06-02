@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>talon — the ai agent platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #ffffff;
+            --fg: #1a1a1a;
+            --accent: #0066cc;
+            --accent-light: #e6f0ff;
+            --border: #e6e6e6;
+            --text-muted: #666666;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent);
+        }
+
+        a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header & Nav */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            font-size: 0.9rem;
+            border: none;
+            color: var(--fg);
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .cta-button {
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .cta-button:hover {
+            opacity: 0.9;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 5rem 5%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .hero-cta a {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .hero-cta a:first-child {
+            background: var(--accent);
+            color: white;
+        }
+
+        .hero-cta a:hover {
+            border: none;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 2rem 5%;
+            text-align: center;
+        }
+
+        .stat-item {
+            border-left: 1px solid var(--border);
+            padding-left: 2rem;
+        }
+
+        .stat-item:first-child {
+            border: none;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Features/Phases */
+        .phases {
+            padding: 5rem 5%;
+            background: var(--accent-light);
+        }
+
+        .phases-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .phases h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .phases-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .phase-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .phase-number {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .phase-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .phase-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 5rem 5%;
+        }
+
+        .use-cases-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .use-cases h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .use-cases-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .use-case-list {
+            list-style: none;
+        }
+
+        .use-case-item {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .use-case-item:last-child {
+            border-bottom: none;
+        }
+
+        .use-case-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .use-case-item p {
+            color: var(--text-muted);
+        }
+
+        /* About */
+        .about {
+            padding: 5rem 5%;
+            background: var(--accent-light);
+        }
+
+        .about-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .about p {
+            font-size: 1.05rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .highlight {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 4px;
+        }
+
+        .highlight-label {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .highlight-text {
+            font-size: 1rem;
+            color: var(--fg);
+        }
+
+        /* Contact */
+        .contact {
+            padding: 5rem 5%;
+        }
+
+        .contact-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-intro {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: grid;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-light);
+        }
+
+        .contact-form button {
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: start;
+        }
+
+        .contact-form button:hover {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            border-top: 1px solid var(--border);
+            background: var(--accent-light);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            border: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                gap: 1rem;
+            }
+
+            nav a {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .phase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-highlights {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 1rem 5%;
+            }
+
+            .hero {
+                padding: 2rem 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">talon</div>
+        <nav>
+            <a href="#capabilities">capabilities</a>
+            <a href="#use-cases">use cases</a>
+            <a href="#about">about</a>
+            <a href="#contact">contact</a>
+            <button class="cta-button">try it</button>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>intelligent agents, operating at scale</h1>
+        <p>talon is the platform built to run agents that learn, remember, and recover. deploy them once, and they work smarter the longer they run — without you writing a single skill file.</p>
+        <div class="hero-cta">
+            <a href="#contact">start a conversation →</a>
+            <a href="/docs">read the docs</a>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stat-item">
+            <div class="stat-number">6</div>
+            <div class="stat-label">complete phases, production ready</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">308</div>
+            <div class="stat-label">tests passing, zero failures</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">3</div>
+            <div class="stat-label">tier memory architecture</div>
+        </div>
+    </section>
+
+    <!-- Phases/Capabilities -->
+    <section class="phases" id="capabilities">
+        <div class="phases-container">
+            <h2>six layers of intelligence</h2>
+            <p class="phases-subtitle">each layer builds on the last, creating a platform that doesn't just follow instructions — it learns, adapts, and recovers.</p>
+            
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="phase-number">phase 1</div>
+                    <h3>memory foundation</h3>
+                    <p>three-tier semantic memory with temporal knowledge graphs. agents never forget. identity snapshots, episodic archives, and procedural skills that compound over time.</p>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-number">phase 2</div>
+                    <h3>intelligence layer</h3>
+                    <p>llm coordinator routes tasks to the right model. budget tracking. telegram native. voice notes. your agents think like experts before acting.</p>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-number">phase 3</div>
+                    <h3>reflection & scaling</h3>
+                    <p>skill generation from trajectories. multi-tenant isolation. agents reflect on their work and create new skills automatically — 40% token cost reduction observed in tests.</p>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-number">phase 4</div>
+                    <h3>governance & coordination</h3>
+                    <p>kanban boards for multi-agent work. checkpoints and state recovery. zombie detection. approval workflows. scale without losing control.</p>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-number">phase 5</div>
+                    <h3>owner experience</h3>
+                    <p>portal for your customers or teams. project context. one-time setup links. onboarding that takes 2 minutes. agents that understand the work, not just the words.</p>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-number">phase 6</div>
+                    <h3>resilience & security</h3>
+                    <p>goal locking. five-level failure escalation. privacy router (local vs cloud). security guardian agent. prompt injection detection. popia/gdpr compliance built in.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases" id="use-cases">
+        <div class="use-cases-container">
+            <h2>what you can build</h2>
+            <p class="use-cases-subtitle">talon is designed for teams and businesses that need agents operating at scale — intelligently, safely, and with memory that counts.</p>
+            
+            <ul class="use-case-list">
+                <li class="use-case-item">
+                    <h3>retail operations</h3>
+                    <p>agents that handle merchandising, replenishment, inventory optimization. they remember your business rules. they learn from what works. they scale to thousands of stores.</p>
+                </li>
+                <li class="use-case-item">
+                    <h3>financial services</h3>
+                    <p>agents for credit decisions, onboarding, compliance. they never forget customer context. they route decisions carefully. they stay within governance.</p>
+                </li>
+                <li class="use-case-item">
+                    <h3>customer experience</h3>
+                    <p>support agents that learn your customer base. they escalate intelligently. they improve with every interaction. they know when to ask for human help.</p>
+                </li>
+                <li class="use-case-item">
+                    <h3>knowledge work</h3>
+                    <p>research agents, analysis agents, writing agents. they maintain context across weeks. they use your company knowledge. they generate skills that stick.</p>
+                </li>
+                <li class="use-case-item">
+                    <h3>compliance & risk</h3>
+                    <p>talon includes popia and gdpr guardrails. data stays local when needed. every action is audited. security hardening is built in, not bolted on.</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about" id="about">
+        <div class="about-container">
+            <h2>built for real work</h2>
+            <p>talon started as a problem: we were building agents and hitting the same issues repeatedly. context limits. forgotten history. failure cascades. agents that needed constant hand-holding. so we built the platform we needed.</p>
+            
+            <p>the result is six complete phases: from three-tier memory to security hardening. 308 tests. zero compromises on reliability or safety. ready to deploy and operate at scale.</p>
+
+            <p>whether you're running agents for retail, financial services, support, or knowledge work — talon gives you the foundation. deploy once, they work smarter the longer they run.</p>
+
+            <div class="about-highlights">
+                <div class="highlight">
+                    <div class="highlight-label">designed by builders</div>
+                    <div class="highlight-text">no academic abstractions. built to solve real problems at scale.</div>
+                </div>
+                <div class="highlight">
+                    <div class="highlight-label">tested thoroughly</div>
+                    <div class="highlight-text">308 passing tests. production-ready code. every phase validated.</div>
+                </div>
+                <div class="highlight">
+                    <div class="highlight-label">secure by design</div>
+                    <div class="highlight-text">popia/gdpr compliant. prompt injection detection. privacy routing. audit logs.</div>
+                </div>
+                <div class="highlight">
+                    <div class="highlight-label">built for scale</div>
+                    <div class="highlight-text">multi-tenant isolation. budget enforcement. goal locking. agents that don't go rogue.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <h2>let's talk</h2>
+            <p class="contact-intro">whether you have an idea, a problem, or just a hunch that there's a better way to run agents — that's enough. send us a message.</p>
+            
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">your name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">your email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">company / project</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                <div class="form-group">
+                    <label for="message">what are you working on?</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit">send it our way →</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>talon — the ai agent platform</p>
+        <p style="margin-top: 1rem;">© 2026 talon. all rights reserved. | <a href="mailto:hello@yourtalon.ai">hello@yourtalon.ai</a></p>
+    </footer>
+</body>
+</html>
