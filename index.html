@@ -293,6 +293,144 @@
             text-align: center;
         }
 
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--paper);
+            padding: 3rem;
+            border-radius: 2px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--mid);
+        }
+
+        .modal-close:hover {
+            color: var(--ink);
+        }
+
+        .modal h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .modal-form button {
+            background: var(--red);
+            color: var(--paper);
+            padding: 0.8rem 1.6rem;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .modal-form button:hover {
+            background: var(--red-hot);
+        }
+
+        .modal-form button:disabled {
+            background: var(--mid);
+            cursor: not-allowed;
+        }
+
+        .thank-you-message {
+            display: none;
+            text-align: center;
+        }
+
+        .thank-you-message.show {
+            display: block;
+        }
+
+        .thank-you-message h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .thank-you-message p {
+            color: var(--mid);
+            margin-bottom: 1.5rem;
+        }
+
+        .thank-you-message .email {
+            background: var(--red-muted);
+            padding: 1rem;
+            border-radius: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .thank-you-message .email a {
+            color: var(--red);
+            font-weight: 500;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             nav {
@@ -320,6 +458,10 @@
             .hero {
                 padding: 3rem 5% 2rem;
             }
+
+            .modal-content {
+                padding: 2rem;
+            }
         }
     </style>
 </head>
@@ -330,8 +472,8 @@
         <nav>
             <a href="#how-it-works">how it works</a>
             <a href="#use-cases">use cases</a>
-            <a href="#contact">contact</a>
-            <a href="mailto:hello@yourtalon.ai" class="btn-primary">let's talk</a>
+            <button style="background:none;border:none;color:var(--ink);cursor:pointer;padding:0;font-size:0.95rem;font-weight:normal;font-family:inherit;" onclick="openContactModal()">contact</button>
+            <button class="btn-primary" onclick="openContactModal()">let's talk</button>
         </nav>
     </header>
 
@@ -341,7 +483,7 @@
         <p class="subtitle">agents that learn, remember, and scale. deploy once, and they work smarter the longer they run. no endless configuration. no forgotten context. just agents that actually understand your business.</p>
         <div class="hero-cta">
             <a href="#how-it-works" class="btn-primary">see how it works</a>
-            <a href="mailto:hello@yourtalon.ai">let's talk</a>
+            <button style="background:none;border:none;color:var(--red);cursor:pointer;padding:0;font-size:0.95rem;font-weight:normal;font-family:inherit;text-decoration:none;" onclick="openContactModal()">let's talk</button>
         </div>
     </section>
 
@@ -424,11 +566,11 @@
     </section>
 
     <!-- CTA -->
-    <section class="cta-section" id="contact">
+    <section class="cta-section">
         <div class="cta-inner">
             <h2>ready to talk about agents that actually work?</h2>
             <p>whether you're running retail, fintech, support, or knowledge work — talon gives you the foundation. deploy once, agents improve every day.</p>
-            <a href="mailto:hello@yourtalon.ai" class="btn-primary">let's talk</a>
+            <button class="btn-primary" onclick="openContactModal()">let's talk</button>
         </div>
     </section>
 
@@ -437,5 +579,88 @@
         <p>talon — built by kerching. trusted intelligent agents for your business.</p>
         <p style="margin-top: 1rem;">© 2026 kerching. all rights reserved. | <a href="mailto:hello@yourtalon.ai">hello@yourtalon.ai</a></p>
     </footer>
+
+    <!-- Contact Modal -->
+    <div class="modal" id="contactModal" onclick="closeContactModalOnBackdrop(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeContactModal()">&times;</button>
+            
+            <div class="form-wrapper">
+                <h2>let's talk</h2>
+                <form name="contact" method="POST" netlify class="modal-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">company</label>
+                        <input type="text" id="company" name="company">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit">send</button>
+                </form>
+            </div>
+
+            <div class="thank-you-message" id="thankYouMessage">
+                <h3>thanks for reaching out</h3>
+                <p>we'll be in touch soon.</p>
+                <div class="email">
+                    <p>or email us directly:</p>
+                    <p><a href="mailto:hello@yourtalon.ai">hello@yourtalon.ai</a></p>
+                </div>
+                <button class="btn-primary" onclick="closeContactModal()">close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openContactModal() {
+            document.getElementById('contactModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').classList.remove('open');
+            document.body.style.overflow = 'auto';
+            resetContactForm();
+        }
+
+        function closeContactModalOnBackdrop(event) {
+            if (event.target.id === 'contactModal') {
+                closeContactModal();
+            }
+        }
+
+        function resetContactForm() {
+            document.getElementById('contactForm').reset();
+            document.querySelector('.form-wrapper').style.display = 'block';
+            document.getElementById('thankYouMessage').classList.remove('show');
+        }
+
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Hide form and show thank you message
+            document.querySelector('.form-wrapper').style.display = 'none';
+            document.getElementById('thankYouMessage').classList.add('show');
+            
+            // Submit the form to Netlify
+            this.submit();
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeContactModal();
+            }
+        });
+    </script>
 </body>
 </html>
